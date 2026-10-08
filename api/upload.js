@@ -1,8 +1,10 @@
 import { put } from '@vercel/blob';
 import { isAdmin } from '../lib/auth.js';
+import { blobToken } from '../lib/token.js';
 
 export default async function handler(req, res) {
   try {
+    if (!blobToken()) return res.status(500).json({ error: 'Token Blob belum ada. Hubungkan Blob store ke project lalu Redeploy.' });
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
     if (!isAdmin(req)) return res.status(401).json({ error: 'Password salah' });
     const chunks = [];
@@ -14,7 +16,7 @@ export default async function handler(req, res) {
     }
     const slug = String(req.query.slug || 'umum').replace(/[^a-z0-9-]/gi, '').slice(0, 60) || 'umum';
     const blob = await put(`dokumentasi/${slug}/${Date.now()}.jpg`, Buffer.concat(chunks), {
-      access: 'public', contentType: 'image/jpeg', addRandomSuffix: true
+      access: 'public', contentType: 'image/jpeg', addRandomSuffix: true, token: blobToken()
     });
     res.status(200).json({ url: blob.url });
   } catch (e) {
