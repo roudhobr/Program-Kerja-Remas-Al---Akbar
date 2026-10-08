@@ -22,7 +22,7 @@ h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;line-height:1.1}
 @keyframes spin{to{transform:rotate(360deg)}}
 .hero small{display:block;color:#8fd8e1;font-weight:600;margin-bottom:18px;opacity:0;animation:fade .8s .1s forwards}
 .hero h1{font-size:clamp(46px,10vw,118px);font-weight:800;letter-spacing:-.03em;max-width:900px}
-.hero h1 span{display:inline-block;opacity:0;transform:translateY(60%) rotate(6deg);animation:pop .7s cubic-bezier(.2,.9,.3,1.2) forwards}
+.hero h1 span{display:inline-block;white-space:nowrap;opacity:0;transform:translateY(60%) rotate(6deg);animation:pop .7s cubic-bezier(.2,.9,.3,1.2) forwards}
 .hero h1 .t{color:var(--teal)}
 @keyframes pop{to{opacity:1;transform:none}}
 @keyframes fade{to{opacity:1}}
@@ -76,7 +76,7 @@ button:focus-visible,.card:focus-visible{outline:3px solid var(--teal);outline-o
 @media(max-width:600px){
  .hero{padding:48px 20px 84px}
  .hero small{font-size:13px;margin-bottom:14px}
- .hero h1{font-size:clamp(38px,12.5vw,56px);letter-spacing:-.025em}
+ .hero h1{font-size:clamp(30px,10.4vw,56px);letter-spacing:-.03em}
  .hero p{font-size:15px;margin-top:16px}
  .stats{gap:10px;margin-top:24px}
  .stat{flex:1;min-width:0;padding:10px 14px}
@@ -106,6 +106,57 @@ button:focus-visible,.card:focus-visible{outline:3px solid var(--teal);outline-o
  .tab i{display:none}
 }
 @media(hover:none){.card:hover{transform:none;box-shadow:none}}
+
+/* ===== Detail & dokumentasi ===== */
+.card .ft{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.card .time{margin-top:0}
+.cam{font-size:12.5px;font-weight:600;background:#fff3e8;color:#c2570f;padding:5px 10px;border-radius:99px}
+.go{margin-left:auto;font-weight:700;font-size:14px;color:var(--c);transition:transform .25s}
+.card:hover .go{transform:translateX(4px)}
+#sheet{position:fixed;inset:0;z-index:100;display:none}
+#sheet.on{display:block}
+.bk{position:absolute;inset:0;background:rgba(13,27,58,.6);backdrop-filter:blur(5px);opacity:0;transition:opacity .35s}
+.pnl{position:absolute;left:50%;top:50%;width:min(780px,94vw);max-height:90vh;overflow-y:auto;overscroll-behavior:contain;background:#fff;border-radius:24px;
+ transform:translate(-50%,-44%) scale(.94);opacity:0;transition:transform .45s cubic-bezier(.2,.9,.3,1.1),opacity .3s}
+#sheet.show .bk{opacity:1}
+#sheet.show .pnl{opacity:1;transform:translate(-50%,-50%)}
+.hd{background:var(--c);color:#fff;padding:26px 26px 22px;position:relative}
+.hd small{font-weight:600;opacity:.9}
+.hd h2{font-size:clamp(26px,5vw,36px);margin-top:6px;padding-right:44px}
+.x{position:absolute;right:14px;top:14px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.22);color:#fff;font-size:22px;cursor:pointer;transition:transform .3s,background .2s}
+.x:hover{transform:rotate(90deg);background:rgba(255,255,255,.35)}
+.bd{padding:22px 26px 28px}
+.bd .ds{font-size:16px;color:var(--ink)}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0 26px}
+.info div{background:var(--paper);border-radius:14px;padding:12px 14px;font-size:14.5px}
+.info b{display:block;font-size:12.5px;color:var(--c);margin-bottom:2px}
+.bd h3{font-size:20px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.bd h3 em{font:600 13px 'Plus Jakarta Sans';font-style:normal;color:var(--mut)}
+.car{position:relative}
+.trk{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;border-radius:16px}
+.trk::-webkit-scrollbar{display:none}
+.sl{flex:0 0 100%;scroll-snap-align:center;aspect-ratio:4/3;border-radius:16px;overflow:hidden;position:relative;background:var(--mint)}
+.sl img{width:100%;height:100%;object-fit:cover;display:block}
+.sl .cp{position:absolute;left:0;right:0;bottom:0;padding:34px 14px 12px;color:#fff;font-size:13.5px;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.sl.ph{display:grid;place-items:center;text-align:center;color:var(--teal-d);font-weight:600;padding:20px;
+ background:repeating-linear-gradient(135deg,var(--mint) 0 14px,#eaf8fa 14px 28px)}
+.sl.ph span{display:block;font-size:34px;margin-bottom:6px}
+.nv{position:absolute;top:50%;width:42px;height:42px;margin-top:-21px;border-radius:50%;border:0;background:rgba(255,255,255,.92);box-shadow:0 4px 14px rgba(0,0,0,.2);font-size:18px;cursor:pointer;transition:transform .2s}
+.nv:hover{transform:scale(1.1)}.nv.l{left:10px}.nv.r{right:10px}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.dots i{width:7px;height:7px;border-radius:99px;background:var(--line);transition:width .3s,background .3s}
+.dots i.on{width:22px;background:var(--c)}
+.lk{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.lk a{padding:11px 18px;border-radius:12px;background:var(--navy);color:#fff;text-decoration:none;font-weight:600;font-size:14px;transition:transform .2s}
+.lk a:hover{transform:translateY(-2px)}
+@media(max-width:600px){
+ .pnl{left:0;right:0;top:auto;bottom:0;width:100%;max-height:92vh;border-radius:24px 24px 0 0;transform:translateY(100%)}
+ #sheet.show .pnl{transform:none}
+ .hd{padding:22px 20px 18px}.bd{padding:18px 18px calc(24px + env(safe-area-inset-bottom))}
+ .nv{display:none}
+ .go{font-size:13.5px}
+}
+@media(hover:none){.nv{display:none}}
 </style>
 </head>
 <body>
@@ -129,163 +180,14 @@ button:focus-visible,.card:focus-visible{outline:3px solid var(--teal);outline-o
   <section class="grid" id="grid" aria-live="polite"></section>
 </main>
 <footer>Pengurus Remaja Masjid Al-Akbar Surabaya · remas@alakbar.or.id</footer>
+<div id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t">
+  <div class="bk" id="bk"></div>
+  <div class="pnl" id="pnl"></div>
+</div>
 <button id="top" aria-label="Kembali ke atas">↑</button>
 
+<script src="data.js"></script>
 <script>
-const DATA = {
- "divisi": [
-  {
-   "id": "bph",
-   "nama": "Badan Pengurus Harian",
-   "ket": "Perekrutan kader dan konsolidasi remaja masjid se-Jawa Timur."
-  },
-  {
-   "id": "dd",
-   "nama": "Dakwah & Digital",
-   "ket": "Syiar Islam lewat kajian, majelis, dan konten digital kekinian."
-  },
-  {
-   "id": "ek",
-   "nama": "Event & Kerja Sama",
-   "ket": "Event besar, PHBI, dan kemitraan strategis."
-  },
-  {
-   "id": "oe",
-   "nama": "Olahraga & Entrepreneurship",
-   "ket": "Kebugaran kader dan jiwa wirausaha mandiri."
-  }
- ],
- "program": [
-  {
-   "d": "bph",
-   "n": "Open Recruitment",
-   "desk": "Perekrutan anggota baru langsung (door to door) ke sekolah-sekolah, dengan fasilitas keanggotaan seperti E-ID Card, seragam, dan program peningkatan skill.",
-   "tujuan": "Menjaring kader baru generasi muda, memperluas keanggotaan, dan membekali anggota baru dengan fasilitas serta keterampilan yang dibutuhkan.",
-   "sasaran": "Siswa SMP/SMA sederajat, target 50 sekolah",
-   "waktu": "Belum ditentukan"
-  },
-  {
-   "d": "bph",
-   "n": "Al-Akbar Memanggil",
-   "desk": "Kegiatan Mosque Youth Movement berupa ajang berkumpul dan berjejaring bagi seluruh pemuda Remaja Masjid (REMAS) se-Jawa Timur.",
-   "tujuan": "Mengajak, mengonsolidasikan, dan mempererat hubungan serta pergerakan pemuda remaja masjid lintas daerah di Jawa Timur.",
-   "sasaran": "Seluruh pemuda REMAS se-Jawa Timur",
-   "waktu": "2 hari (Hari 1 pembukaan & kemasjidan, Hari 2 penguatan organisasi & malam puncak)"
-  },
-  {
-   "d": "dd",
-   "n": "Majelis Shubuh GenZi",
-   "desk": "Kajian keislaman setelah shalat Subuh dengan narasumber yang berganti setiap bulan.",
-   "tujuan": "Wadah bagi generasi muda meningkatkan pemahaman keislaman dan membangun kebiasaan mengikuti kajian selepas Subuh.",
-   "sasaran": "Generasi muda / Gen Z (minimal 1.000 peserta)",
-   "waktu": "1 bulan sekali"
-  },
-  {
-   "d": "dd",
-   "n": "GenZi Night Spectacular",
-   "desk": "Diskusi dan sharing interaktif dengan mengangkat isu yang relevan dengan kehidupan anak muda.",
-   "tujuan": "Wadah memperoleh wawasan, bertukar perspektif, dan membahas isu yang dekat dengan keseharian.",
-   "sasaran": "Generasi muda / Gen Z (minimal 100 orang)",
-   "waktu": "2 bulan sekali"
-  },
-  {
-   "d": "dd",
-   "n": "Majelis Sholawat Al-Akbar",
-   "desk": "Majelis sholawat dan pembacaan Diba’an secara rutin.",
-   "tujuan": "Wadah bagi jamaah, khususnya generasi muda, meningkatkan kecintaan kepada Rasulullah SAW dan memperkuat ukhuwah.",
-   "sasaran": "Jamaah dan generasi muda",
-   "waktu": "2 minggu sekali, setiap Kamis malam"
-  },
-  {
-   "d": "dd",
-   "n": "Tahsin Al-Qur’an",
-   "desk": "Pelaksanaan tahsin Al-Qur’an secara bersama-sama.",
-   "tujuan": "Meningkatkan kemampuan dan ketepatan membaca Al-Qur’an sesuai kaidah tajwid.",
-   "sasaran": "STAI dan peserta umum (pendaftaran online)",
-   "waktu": "Setiap Rabu, ba’da Isya"
-  },
-  {
-   "d": "dd",
-   "n": "Islamic StoryFest",
-   "desk": "Lomba Islamic storytelling.",
-   "tujuan": "Mengenalkan nilai-nilai keislaman melalui storytelling yang menarik dan sesuai usia anak.",
-   "sasaran": "Siswa SD – SMP",
-   "waktu": "1 Muharram"
-  },
-  {
-   "d": "dd",
-   "n": "Lomba Konten Hari Santri",
-   "desk": "Lomba pembuatan konten bertema Masjid Al-Akbar untuk memperingati Hari Santri.",
-   "tujuan": "Mendorong kreativitas membuat konten positif sekaligus memperkenalkan Masjid Al-Akbar lewat media digital.",
-   "sasaran": "Umum",
-   "waktu": "Hari Santri"
-  },
-  {
-   "d": "dd",
-   "n": "Engagement Care",
-   "desk": "Pembuatan dan publikasi story interaktif di media sosial.",
-   "tujuan": "Meningkatkan interaksi dan keterlibatan audiens dengan media sosial Al-Akbar.",
-   "sasaran": "Pengikut media sosial Al-Akbar",
-   "waktu": "2 kali sebulan (minggu pertama dan minggu terakhir)"
-  },
-  {
-   "d": "dd",
-   "n": "Clipper MSG",
-   "desk": "Mengambil potongan momen menarik dari live MSG, lalu mengolahnya menjadi video pendek.",
-   "tujuan": "Menghasilkan konten singkat yang informatif dan menarik dari MSG untuk meningkatkan engagement.",
-   "sasaran": "Pengikut media sosial Al-Akbar",
-   "waktu": "1 kali per bulan / 2 bulan sekali (H+7 MSG)"
-  },
-  {
-   "d": "ek",
-   "n": "Volunteer Ramadhan 1448 H",
-   "desk": "Kegiatan sosial yang mengajak para volunteer.",
-   "tujuan": "Membantu pelaksanaan event-event Ramadhan Masjid Al-Akbar.",
-   "sasaran": "Volunteer",
-   "waktu": "Selama event Ramadhan 1448 H"
-  },
-  {
-   "d": "ek",
-   "n": "Festival Remas",
-   "desk": "Rangkaian kegiatan dalam rangka memperingati perjalanan Remaja Masjid.",
-   "tujuan": "Memperingati dan merayakan perjalanan Remaja Masjid.",
-   "sasaran": "Sasaran utama (rincian terpotong di dokumen)",
-   "waktu": "Hari 1 — Grand Opening"
-  },
-  {
-   "d": "ek",
-   "n": "Kemitraan",
-   "desk": "Media partner: menjalin dan mengelola kerja sama publikasi.",
-   "tujuan": "Membangun relasi strategis dengan pihak internal dan eksternal.",
-   "sasaran": "Pihak internal dan eksternal",
-   "waktu": "Dilaksanakan selama 1 periode"
-  },
-  {
-   "d": "oe",
-   "n": "Ngaji Soccer",
-   "desk": "Bergabung dalam program Masjid Al-Akbar “Ngaji Soccer”: ceramah singkat dan kegiatan olahraga.",
-   "tujuan": "Meramaikan program serta meningkatkan kesadaran hidup sehat.",
-   "sasaran": "Seluruh anggota Remas Al-Akbar Surabaya",
-   "waktu": "Setiap Selasa malam, pukul 19:00 – selesai"
-  },
-  {
-   "d": "oe",
-   "n": "Remas Competition Series (RCS)",
-   "desk": "Kompetisi olahraga dan e-sport (mini soccer dan Mobile Legends).",
-   "tujuan": "Menyalurkan bakat, menciptakan kegiatan positif, aktif, dan sportif, serta memperkenalkan Remas Al-Akbar sebagai wadah positif bagi semua lapisan.",
-   "sasaran": "Internal masjid dan eksternal",
-   "waktu": "2 kali dalam 1 tahun"
-  },
-  {
-   "d": "oe",
-   "n": "Bugarin",
-   "desk": "Agenda kesehatan berupa olahraga bersama yang sehat, menyenangkan, dan inklusif.",
-   "tujuan": "Meningkatkan kesadaran masyarakat tentang olahraga sekaligus mempererat silaturahmi Remas dengan warga sekitar.",
-   "sasaran": "Masyarakat sekitar yang biasa berolahraga di lingkungan Al-Akbar",
-   "waktu": "Setiap 2 bulan sekali"
-  }
- ]
-};
 const COL = {bph:'var(--c-bph)',dd:'var(--c-dd)',ek:'var(--c-ek)',oe:'var(--c-oe)'};
 let cur='all', term='';
 const $ = s => document.querySelector(s);
@@ -296,7 +198,7 @@ const esc = t => String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
   const walk=n=>{[...n.childNodes].forEach(c=>{
     if(c.nodeType===3){const f=document.createDocumentFragment();
       c.textContent.split(/(\s+)/).forEach(w=>{ if(/^\s+$/.test(w)||!w){f.append(w);return}
-        const wd=document.createElement('span');wd.style.cssText='display:inline-block;opacity:1;transform:none;animation:none';
+        const wd=document.createElement('span');wd.style.cssText='white-space:nowrap;display:inline-block;opacity:1;transform:none;animation:none';
         [...w].forEach(ch=>{const s=document.createElement('span');s.textContent=ch;s.style.animationDelay=(.25+i++*.035)+'s';wd.append(s)});f.append(wd)});
       c.replaceWith(f)} else if(c.nodeType===1) walk(c)})};
   walk(el)})();
@@ -321,16 +223,14 @@ function render(){
   const g=$('#grid');
   g.innerHTML=items.length?items.map((p,i)=>{
     const dv=DATA.divisi.find(x=>x.id===p.d).nama;
-    return '<article class="card" tabindex="0" role="button" aria-expanded="false" style="--c:'+COL[p.d]+';animation-delay:'+(i*55)+'ms">'
-    +'<div class="dv">'+esc(dv)+'</div><h3>'+esc(p.n)+'</h3><p class="s">'+esc(p.desk)+'</p><span class="chev"></span>'
-    +'<div class="more"><div>'
-    +'<div class="row"><b>Tujuan</b>'+esc(p.tujuan)+'</div>'
-    +'<div class="row"><b>Sasaran peserta</b>'+esc(p.sasaran)+'</div>'
-    +'<div class="row"><b>Waktu</b>'+esc(p.waktu)+'</div></div></div>'
-    +'<span class="time">'+esc(p.waktu.split(',')[0].split('(')[0])+'</span></article>'}).join('')
+    const n=(p.dok&&p.dok.foto||[]).length;
+    return '<article class="card" tabindex="0" role="button" data-i="'+DATA.program.indexOf(p)+'" style="--c:'+COL[p.d]+';animation-delay:'+(i*55)+'ms">'
+    +'<div class="dv">'+esc(dv)+'</div><h3>'+esc(p.n)+'</h3><p class="s">'+esc(p.desk)+'</p>'
+    +'<div class="ft"><span class="time">'+esc(p.waktu.split(',')[0].split('(')[0])+'</span>'
+    +(n?'<span class="cam">📷 '+n+'</span>':'')+'<span class="go">Detail →</span></div></article>'}).join('')
     :'<div class="empty"><h3>Tidak ada program yang cocok</h3><p>Coba kata kunci lain atau pilih tab Semua.</p></div>';
   g.querySelectorAll('.card').forEach(c=>{
-    const t=()=>{const o=c.classList.toggle('open');c.setAttribute('aria-expanded',o)};
+    const t=()=>openSheet(+c.dataset.i);
     c.onclick=t;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}}})}
 
 $('#q').addEventListener('input',e=>{term=e.target.value.trim();render()});
@@ -345,6 +245,50 @@ addEventListener('scroll',()=>{const h=document.documentElement;
   $('#top').classList.toggle('show',h.scrollTop>500)});
 $('#top').onclick=()=>scrollTo({top:0,behavior:'smooth'});
 addEventListener('resize',setTab);
+
+// ===== Detail + dokumentasi =====
+const setHash=u=>{try{history.replaceState(null,'',u)}catch(e){}};
+const slug=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const sheet=$('#sheet'),pnl=$('#pnl');let lastFocus=null;
+function openSheet(i,fromHash){
+  const p=DATA.program[i],dv=DATA.divisi.find(x=>x.id===p.d).nama,dok=p.dok||{},foto=dok.foto||[];
+  const slides=foto.length?foto.map(f=>'<div class="sl"><img loading="lazy" src="'+esc(f.src)+'" alt="'+esc(f.cap||p.n)+'" onerror="this.parentNode.classList.add(\'ph\');this.parentNode.innerHTML=\'<div><span>🖼️</span>Foto belum bisa dimuat</div>\'">'
+      +(f.cap?'<div class="cp">'+esc(f.cap)+(f.tgl?' · '+esc(f.tgl):'')+'</div>':'')+'</div>').join('')
+    :'<div class="sl ph"><div><span>📷</span>Dokumentasi segera hadir</div></div>';
+  const links=(dok.album?'<a href="'+esc(dok.album)+'" target="_blank" rel="noopener">Album lengkap ↗</a>':'')+(dok.video?'<a href="'+esc(dok.video)+'" target="_blank" rel="noopener">Tonton video ↗</a>':'');
+  pnl.style.setProperty('--c',COL[p.d]);
+  pnl.innerHTML='<div class="hd"><small>'+esc(dv)+'</small><h2 id="sh-t">'+esc(p.n)+'</h2><button class="x" id="x" aria-label="Tutup">×</button></div>'
+   +'<div class="bd"><p class="ds">'+esc(p.desk)+'</p>'
+   +'<div class="info"><div><b>Tujuan</b>'+esc(p.tujuan)+'</div><div><b>Sasaran peserta</b>'+esc(p.sasaran)+'</div><div><b>Waktu</b>'+esc(p.waktu)+'</div></div>'
+   +'<h3>Dokumentasi'+(foto.length?'<em id="cnt">1 / '+foto.length+'</em>':'')+'</h3>'
+   +'<div class="car"><div class="trk" id="trk">'+slides+'</div>'
+   +(foto.length>1?'<button class="nv l" id="pv" aria-label="Sebelumnya">‹</button><button class="nv r" id="nx" aria-label="Berikutnya">›</button></div><div class="dots" id="dots">'+foto.map((_,k)=>'<i'+(k?'':' class="on"')+'></i>').join('')+'</div>':'</div>')
+   +(links?'<div class="lk">'+links+'</div>':'')+'</div>';
+  lastFocus=document.activeElement;pnl.scrollTop=0;
+  sheet.classList.add('on');document.body.style.overflow='hidden';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.classList.add('show')));
+  $('#x').onclick=closeSheet;$('#x').focus({preventScroll:true});
+  const trk=$('#trk');
+  if(foto.length>1){
+    const step=()=>trk.firstElementChild.offsetWidth+12;
+    $('#pv').onclick=()=>trk.scrollBy({left:-step(),behavior:'smooth'});
+    $('#nx').onclick=()=>trk.scrollBy({left:step(),behavior:'smooth'});
+    trk.addEventListener('scroll',()=>{const k=Math.round(trk.scrollLeft/step());
+      $('#cnt').textContent=(k+1)+' / '+foto.length;
+      [...$('#dots').children].forEach((d,j)=>d.classList.toggle('on',j===k))},{passive:true});
+  }
+  if(!fromHash)setHash('#'+slug(p.n));
+}
+function closeSheet(){
+  sheet.classList.remove('show');document.body.style.overflow='';
+  setHash(location.pathname+location.search);
+  setTimeout(()=>{if(!sheet.classList.contains('show'))sheet.classList.remove('on')},420);
+  if(lastFocus)lastFocus.focus({preventScroll:true});
+}
+$('#bk').onclick=closeSheet;
+addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('on'))closeSheet()});
+const h0=location.hash.slice(1);if(h0){const i=DATA.program.findIndex(p=>slug(p.n)===h0);if(i>-1)setTimeout(()=>openSheet(i,true),300)}
+fetch('/api/docs').then(r=>r.ok?r.json():{}).then(m=>{DATA.program.forEach(p=>{const d=m[slug(p.n)];if(d)p.dok=d});render()}).catch(()=>{});
 document.fonts.ready.then(setTab);setTab();render();
 </script>
 </body>

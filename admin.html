@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Admin Dokumentasi · Remas Al-Akbar</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1b3a;--teal:#0e9aab;--mint:#dff4f6;--paper:#f6fafb;--line:#d8e4e8;--mut:#5b6b82;--red:#d9363e}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--paper);color:#14213d;min-height:100vh}
+h1,h2{font-family:'Bricolage Grotesque',sans-serif}
+.top{background:var(--navy);color:#fff;padding:16px 5vw;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.top h1{font-size:20px}.top a,.top button{color:#9fe0e8;font:600 14px inherit;background:none;border:0;cursor:pointer;text-decoration:none;margin-left:14px}
+.box{max-width:960px;margin:26px auto;padding:0 5vw}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px;animation:in .45s both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+#login{max-width:380px;margin:12vh auto;text-align:center}
+#login h2{font-size:28px;margin-bottom:6px}#login p{color:var(--mut);margin-bottom:16px}
+label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin:12px 0 5px}
+input,select{width:100%;font:500 15px 'Plus Jakarta Sans';padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;outline:0;transition:.2s}
+input:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 4px var(--mint)}
+.btn{background:var(--teal);color:#fff;border:0;border-radius:12px;padding:13px 20px;font:700 15px 'Plus Jakarta Sans';cursor:pointer;transition:transform .2s,opacity .2s}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.5;transform:none}
+.btn.dk{background:var(--navy)}.btn.w{width:100%;margin-top:14px}
+.drop{border:2px dashed var(--teal);background:var(--mint);border-radius:16px;padding:26px;text-align:center;cursor:pointer;transition:.25s;font-weight:600;color:#0a7886}
+.drop:hover,.drop.on{transform:scale(1.01);background:#cdeef2}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:16px}
+.th{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;animation:in .4s both}
+.th img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--mint)}
+.th .f{padding:10px}.th input{padding:8px 10px;font-size:13.5px;margin-bottom:6px}
+.ac{display:flex;gap:6px}.ac button{flex:1;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px;cursor:pointer;font-size:14px}
+.ac .d{color:var(--red)}
+.up{opacity:.6;display:grid;place-items:center;aspect-ratio:4/3;font-weight:600;color:var(--mut)}
+.bar{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 5vw;display:flex;gap:12px;align-items:center;justify-content:space-between}
+#st{font-size:14px;color:var(--mut)}#st.dirty{color:#c2570f;font-weight:600}
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,30px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:99px;opacity:0;transition:.35s;pointer-events:none;z-index:50;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}#toast.err{background:var(--red)}
+.hide{display:none!important}
+</style></head><body>
+
+<div id="login" class="card">
+  <h2>Admin Dokumentasi</h2><p>Masukkan password admin Remas Al-Akbar.</p>
+  <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
+  <button class="btn w" id="go">Masuk</button>
+</div>
+
+<div id="app" class="hide">
+  <div class="top"><h1>📷 Admin Dokumentasi</h1><div><a href="/" target="_blank">Lihat situs</a><button id="out">Keluar</button></div></div>
+  <div class="box">
+    <div class="card">
+      <label>Pilih program kerja</label><select id="sel"></select>
+      <label>Link album lengkap (opsional)</label><input id="album" placeholder="https://drive.google.com/...">
+      <label>Link video (opsional)</label><input id="video" placeholder="https://youtube.com/...">
+    </div>
+    <div class="card">
+      <div class="drop" id="drop">＋ Ketuk untuk pilih foto (bisa banyak sekaligus)<br><small style="font-weight:500">Foto otomatis diperkecil sebelum diunggah</small></div>
+      <input id="file" type="file" accept="image/*" multiple class="hide">
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+  <div class="bar"><span id="st">Tidak ada perubahan</span><button class="btn dk" id="save" disabled>Simpan perubahan</button></div>
+</div>
+<div id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const slug=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let PW=sessionStorage.getItem('pw')||'',dok={},cur=null,removed=[],dirty=false,busy=0;
+
+function toast(m,err){const t=$('#toast');t.textContent=m;t.className='on'+(err?' err':'');clearTimeout(t._);t._=setTimeout(()=>t.className='',2800)}
+function setDirty(v){dirty=v;$('#st').textContent=v?'Ada perubahan yang belum disimpan':'Tidak ada perubahan';$('#st').className=v?'dirty':'';$('#save').disabled=!v||busy>0}
+async function api(url,opt={}){
+  opt.headers=Object.assign({'x-admin-password':PW},opt.headers||{});
+  const r=await fetch(url,opt);const j=await r.json().catch(()=>({}));
+  if(r.status===401){logout(true);throw new Error('Password salah')}
+  if(!r.ok)throw new Error(j.error||('Error '+r.status));return j}
+function logout(silent){sessionStorage.removeItem('pw');PW='';$('#app').classList.add('hide');$('#login').classList.remove('hide');if(!silent)toast('Anda sudah keluar')}
+
+async function login(){
+  PW=$('#pw').value||PW;$('#go').disabled=true;
+  try{
+    await api('/api/docs',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({check:true})});
+    sessionStorage.setItem('pw',PW);
+    dok=await (await fetch('/api/docs?t='+Date.now())).json();
+    $('#login').classList.add('hide');$('#app').classList.remove('hide');buildSelect();pick();
+  }catch(e){toast(e.message,true)}
+  $('#go').disabled=false}
+$('#go').onclick=login;$('#pw').onkeydown=e=>{if(e.key==='Enter')login()};$('#out').onclick=()=>logout();
+
+function buildSelect(){
+  $('#sel').innerHTML=DATA.divisi.map(d=>'<optgroup label="'+esc(d.nama)+'">'+DATA.program.filter(p=>p.d===d.id).map(p=>{
+    const n=((dok[slug(p.n)]||{}).foto||[]).length;return '<option value="'+slug(p.n)+'">'+esc(p.n)+(n?'  ('+n+' foto)':'')+'</option>'}).join('')+'</optgroup>').join('');
+  if(cur)$('#sel').value=cur}
+function entry(){return dok[cur]||(dok[cur]={foto:[]})}
+function pick(){cur=$('#sel').value;const e=entry();$('#album').value=e.album||'';$('#video').value=e.video||'';draw()}
+$('#sel').onchange=pick;
+$('#album').oninput=e=>{entry().album=e.target.value.trim();setDirty(true)};
+$('#video').oninput=e=>{entry().video=e.target.value.trim();setDirty(true)};
+
+function draw(){
+  const f=entry().foto||(entry().foto=[]);
+  $('#grid').innerHTML=f.map((x,i)=>'<div class="th" style="animation-delay:'+i*40+'ms"><img src="'+esc(x.src)+'" loading="lazy" alt="">'
+   +'<div class="f"><input data-k="cap" data-i="'+i+'" value="'+esc(x.cap||'')+'" placeholder="Keterangan foto">'
+   +'<input data-k="tgl" data-i="'+i+'" value="'+esc(x.tgl||'')+'" placeholder="Tanggal, mis. 4 Okt 2026">'
+   +'<div class="ac"><button data-m="-1" data-i="'+i+'" aria-label="Geser kiri">◀</button><button data-m="1" data-i="'+i+'" aria-label="Geser kanan">▶</button><button class="d" data-del="'+i+'" aria-label="Hapus">🗑</button></div></div></div>').join('')
+   +'<div class="up hide" id="upl"></div>'}
+$('#grid').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;entry().foto[+e.target.dataset.i][k]=e.target.value;setDirty(true)});
+$('#grid').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;const f=entry().foto;
+  if(b.dataset.del!==undefined){if(!confirm('Hapus foto ini?'))return;const [x]=f.splice(+b.dataset.del,1);removed.push(x.src)}
+  else{const i=+b.dataset.i,j=i+ +b.dataset.m;if(j<0||j>=f.length)return;[f[i],f[j]]=[f[j],f[i]]}
+  setDirty(true);draw()});
+
+async function shrink(file){
+  const bm=await createImageBitmap(file,{imageOrientation:'from-image'});
+  const k=Math.min(1,1600/Math.max(bm.width,bm.height));
+  const c=document.createElement('canvas');c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);
+  c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+  return new Promise(r=>c.toBlob(r,'image/jpeg',.82))}
+async function addFiles(files){
+  const s=cur;
+  for(const file of files){
+    busy++;setDirty(dirty);const u=$('#upl');if(u){u.classList.remove('hide');u.textContent='Mengunggah… ('+busy+')'}
+    try{
+      const blob=await shrink(file);
+      const r=await api('/api/upload?slug='+s,{method:'POST',headers:{'content-type':'image/jpeg'},body:blob});
+      (dok[s]||(dok[s]={foto:[]})).foto.push({src:r.url,cap:'',tgl:''});setDirty(true);
+    }catch(e){toast(file.name+': '+e.message,true)}
+    busy--;if(cur===s)draw();setDirty(dirty)}
+  }
+$('#drop').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{addFiles([...e.target.files]);e.target.value=''};
+['dragover','dragleave','drop'].forEach(n=>$('#drop').addEventListener(n,e=>{e.preventDefault();$('#drop').classList.toggle('on',n==='dragover');if(n==='drop')addFiles([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')))}));
+
+$('#save').onclick=async()=>{
+  $('#save').disabled=true;$('#save').textContent='Menyimpan…';
+  const out={};Object.entries(dok).forEach(([k,v])=>{const foto=(v.foto||[]).filter(x=>x.src);if(foto.length||v.album||v.video)out[k]={foto,album:v.album||'',video:v.video||''}});
+  try{await api('/api/docs',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({dok:out,remove:removed})});
+    removed=[];dok=out;setDirty(false);buildSelect();toast('Tersimpan. Situs akan diperbarui dalam ±1 menit.')}
+  catch(e){toast(e.message,true);setDirty(true)}
+  $('#save').textContent='Simpan perubahan'};
+addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+if(PW)login();
+</script></body></html>
